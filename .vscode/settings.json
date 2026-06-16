@@ -1,0 +1,12 @@
+{
+  "cmake.configureOnOpen": true,
+
+  "cmake.sourceDirectory": "${workspaceFolder}/cpp",
+  "cmake.buildDirectory": "${workspaceFolder}/cpp/build",
+
+  "cmake.generator": "Ninja",
+
+  "cmake.configureSettings": {
+    "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+  }
+}

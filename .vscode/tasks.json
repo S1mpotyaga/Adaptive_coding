@@ -1,0 +1,33 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "CMake Configure (cpp)",
+      "type": "shell",
+      "command": "cmake",
+      "args": [
+        "-S",
+        "${workspaceFolder}/cpp",
+        "-B",
+        "${workspaceFolder}/cpp/build"
+      ],
+      "problemMatcher": []
+    },
+
+    {
+      "label": "CMake Build (cpp)",
+      "type": "shell",
+      "command": "cmake",
+      "args": [
+        "--build",
+        "${workspaceFolder}/cpp/build"
+      ],
+      "dependsOn": "CMake Configure (cpp)",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": []
+    }
+  ]
+}
