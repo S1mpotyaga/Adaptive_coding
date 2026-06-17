@@ -14,7 +14,9 @@ namespace adaptive{
 
 class Drawer{
 public:
-    void draw(const SampledSignal& original_values, const std::string& type);
+    void draw_grow_factor(const SampledSignal& original_values, const std::string& type);
+
+    void draw_fixed(const SampledSignal& original_values, const std::string& type);
 
 private:
     void save_signal_comparison(
@@ -25,10 +27,17 @@ private:
         const std::vector<double>& decoded_signal
     );
 
-    const std::filesystem::path m_output_directory =
+    const std::filesystem::path m_output_directory_grow_factor =
         std::filesystem::path(PROJECT_ROOT) /
         "images" /
-        "one-demensial";
+        "one-demensial" / 
+        "grow-factor";
+
+    const std::filesystem::path m_output_directory_fixed = 
+        std::filesystem::path(PROJECT_ROOT)/
+        "images" /
+        "one-demensial" /
+        "fixed";
 };
 
 } // namespace adaptive

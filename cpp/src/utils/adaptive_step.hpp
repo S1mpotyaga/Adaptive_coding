@@ -10,7 +10,9 @@ class AdaptiveStep{
 public:
     explicit AdaptiveStep(const AdaptiveConfig& a_config);
 
-    void update(const std::int8_t code, const bool fixed = true);
+    void update_fixed(const std::int8_t code);
+
+    void update_grow_factor(const std::int8_t code);
 
     double value() const noexcept;
 

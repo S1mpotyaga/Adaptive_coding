@@ -26,28 +26,15 @@ void Drawer::save_signal_comparison(
 
     auto ax = fig->current_axes();
 
-    auto original_line = matplot::plot(
-        ax,
-        time,
-        original_signal
-    );
+    auto original_line = matplot::plot(ax, time, original_signal);
 
-    original_line
-        ->line_width(2)
-        .display_name("Исходный сигнал");
+    original_line->line_width(2).display_name("Исходный сигнал");
 
     matplot::hold(ax, matplot::on);
 
-    auto decoded_line = matplot::plot(
-        ax,
-        time,
-        decoded_signal,
-        "--"
-    );
+    auto decoded_line = matplot::plot(ax, time, decoded_signal, "--");
 
-    decoded_line
-        ->line_width(2)
-        .display_name("Раскодированный сигнал");
+    decoded_line->line_width(2).display_name("Раскодированный сигнал");
 
     matplot::hold(ax, matplot::off);
 
@@ -71,7 +58,7 @@ void Drawer::save_signal_comparison(
     fig->save(filename.string());
 }
 
-void Drawer::draw(const SampledSignal& original_values, const std::string& type) {
+void Drawer::draw_grow_factor(const SampledSignal& original_values, const std::string& type) {
     AdaptiveConfig config;
     config.initial_step = 1.0;
     config.min_step = 0.1;
@@ -79,16 +66,16 @@ void Drawer::draw(const SampledSignal& original_values, const std::string& type)
     config.grow_factor = 1.2;
     config.decay_factor = 0.8;
 
-    std::filesystem::create_directories(m_output_directory);
+    std::filesystem::create_directories(m_output_directory_grow_factor);
 
     Coder coder(config);
     Decoder decoder(config);
 
     const auto encoded_values =
-        coder.encode(original_values.x);
+        coder.encode_grow_factor(original_values.x);
 
     const auto decoded_values =
-        decoder.decode(encoded_values);
+        decoder.decode_grow_factor(encoded_values);
 
     const std::string filename =
         type + "_comparison.jpg";
@@ -97,7 +84,41 @@ void Drawer::draw(const SampledSignal& original_values, const std::string& type)
         "Сравнение исходного и раскодированного сигнала: " + type;
 
     save_signal_comparison(
-        m_output_directory / filename,
+        m_output_directory_grow_factor / filename,
+        title,
+        original_values.t,
+        original_values.x,
+        decoded_values
+    );
+}
+
+void Drawer::draw_fixed(const SampledSignal& original_values, const std::string& type) {
+    AdaptiveConfig config;
+    config.initial_step = 1.0;
+    config.min_step = 0.1;
+    config.max_step = 100.0;
+    config.grow_factor = 1.2;
+    config.decay_factor = 0.8;
+
+    std::filesystem::create_directories(m_output_directory_fixed);
+
+    Coder coder(config);
+    Decoder decoder(config);
+
+    const auto encoded_values =
+        coder.encode_fixed(original_values.x);
+
+    const auto decoded_values =
+        decoder.decode_fixed(encoded_values);
+
+    const std::string filename =
+        type + "_comparison.jpg";
+
+    const std::string title =
+        "Сравнение исходного и раскодированного сигнала: " + type;
+
+    save_signal_comparison(
+        m_output_directory_fixed / filename,
         title,
         original_values.t,
         original_values.x,

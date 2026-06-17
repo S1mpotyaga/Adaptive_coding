@@ -11,7 +11,9 @@ class Coder{
 public:
     explicit Coder(const AdaptiveConfig& a_config);
 
-    [[nodiscard]] EncodedData encode(const std::vector<double>& signal) const;
+    [[nodiscard]] EncodedData encode_grow_factor(const std::vector<double>& signal) const;
+
+    [[nodiscard]] EncodedData encode_fixed(const std::vector<double>& signal) const;
 
 private:
     AdaptiveConfig m_config;

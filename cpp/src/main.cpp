@@ -15,7 +15,7 @@ int main()
     auto signal_sin = generator_sin(4, 2);
     auto signal_random = generator_random(3, 1.5);
 
-    const double duration = 10;
+    const double duration = 5;
     const double fs = 10;
 
     const SampledSignal original_values_const =
@@ -30,10 +30,16 @@ int main()
         sample(signal_random, duration, fs);
 
     Drawer drawer;
-    drawer.draw(original_values_const, "const");
-    drawer.draw(original_values_inc, "inc");
-    drawer.draw(original_values_dec, "dec");
-    drawer.draw(original_values_sin, "sin");
-    drawer.draw(original_values_random, "random");
+    drawer.draw_grow_factor(original_values_const, "const");
+    drawer.draw_grow_factor(original_values_inc, "inc");
+    drawer.draw_grow_factor(original_values_dec, "dec");
+    drawer.draw_grow_factor(original_values_sin, "sin");
+    drawer.draw_grow_factor(original_values_random, "random");
+
+    drawer.draw_fixed(original_values_const, "const");
+    drawer.draw_fixed(original_values_inc, "inc");
+    drawer.draw_fixed(original_values_dec, "dec");
+    drawer.draw_fixed(original_values_sin, "sin");
+    drawer.draw_fixed(original_values_random, "random");
     return 0;
 }

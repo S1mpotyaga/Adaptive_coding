@@ -26,7 +26,15 @@ AdaptiveStep::AdaptiveStep(const AdaptiveConfig& a_config):
     }
 }
 
-void AdaptiveStep::update(const std::int8_t code, const bool fixed){
+void AdaptiveStep::update_fixed(const std::int8_t code){
+    if (code != 1 && code != -1){
+        throw std::invalid_argument("Code must be 1 or -1");
+    }
+    m_previous_code = code;
+    m_has_previous_code = true;
+}
+
+void AdaptiveStep::update_grow_factor(const std::int8_t code){
     if (code != 1 && code != -1){
         throw std::invalid_argument("Code must be 1 or -1");
     }
@@ -42,6 +50,8 @@ void AdaptiveStep::update(const std::int8_t code, const bool fixed){
     m_previous_code = code;
     m_has_previous_code = true;
 }
+
+
 
 double AdaptiveStep::value() const noexcept{
     return m_step;
