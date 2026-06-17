@@ -18,6 +18,8 @@ public:
 
     void draw_fixed(const SampledSignal& original_values, const std::string& type);
 
+    void draw_zooming(const SampledSignal& original_values, const std::string& type, const double fs);
+
 private:
     void save_signal_comparison(
         const std::filesystem::path& filename,
@@ -34,10 +36,16 @@ private:
         "grow-factor";
 
     const std::filesystem::path m_output_directory_fixed = 
-        std::filesystem::path(PROJECT_ROOT)/
+        std::filesystem::path(PROJECT_ROOT) /
         "images" /
         "one-demensial" /
         "fixed";
+
+    const std::filesystem::path m_output_directory_zooming = 
+        std::filesystem::path(PROJECT_ROOT) /
+        "images" / 
+        "one-demensial" / 
+        "zooming";
 };
 
 } // namespace adaptive

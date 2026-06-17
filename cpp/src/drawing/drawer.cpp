@@ -126,4 +126,47 @@ void Drawer::draw_fixed(const SampledSignal& original_values, const std::string&
     );
 }
 
+void Drawer::draw_zooming(const SampledSignal& original_values, const std::string& type, const double fs) {
+    AdaptiveConfig adaptive_config;
+    adaptive_config.initial_step = 0.05;
+    adaptive_config.min_step = 0.005;
+    adaptive_config.max_step = 0.3;
+    adaptive_config.grow_factor = 1.2;
+    adaptive_config.decay_factor = 0.8;
+    adaptive_config.zoom_offset = 0.002;
+
+    ObserverConfig observer_config;
+    observer_config.T = 1.0 / fs;
+    observer_config.l1 = 0.15;
+    observer_config.l2 = 0.01;
+    observer_config.initial_y = original_values.x.front();
+    observer_config.initial_v = 0.0;
+
+    std::filesystem::create_directories(m_output_directory_zooming);
+
+    Coder coder(adaptive_config, observer_config);
+    Decoder decoder(adaptive_config, observer_config);
+
+    const auto encoded_values =
+        coder.encode_zooming(original_values.x);
+
+    const auto decoded_values =
+        decoder.decode_zooming(encoded_values);
+
+    const std::string filename =
+        type + "_comparison.jpg";
+
+    const std::string title =
+        "Сравнение исходного и раскодированного сигнала: " + type;
+
+    save_signal_comparison(
+        m_output_directory_zooming / filename,
+        title,
+        original_values.t,
+        original_values.x,
+        decoded_values
+    );
+}
+
+
 } // namespace adaptive

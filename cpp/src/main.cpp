@@ -12,11 +12,11 @@ int main()
     auto signal_const = generator_constant(2);
     auto signal_inc = generator_inc(3, 3);
     auto signal_dec = generator_dec(3, 2);
-    auto signal_sin = generator_sin(4, 2);
-    auto signal_random = generator_random(3, 1.5);
+    auto signal_sin = generator_sin(4, 0.1);
+    auto signal_random = generator_random(3, 1.1);
 
-    const double duration = 5;
-    const double fs = 10;
+    const double duration = 10;
+    const double fs = 20;
 
     const SampledSignal original_values_const =
         sample(signal_const, duration, fs);
@@ -41,5 +41,11 @@ int main()
     drawer.draw_fixed(original_values_dec, "dec");
     drawer.draw_fixed(original_values_sin, "sin");
     drawer.draw_fixed(original_values_random, "random");
+
+    drawer.draw_zooming(original_values_const, "const", fs);
+    drawer.draw_zooming(original_values_inc, "inc", fs);
+    drawer.draw_zooming(original_values_dec, "dec", fs);
+    drawer.draw_zooming(original_values_sin, "sin", fs);
+    drawer.draw_zooming(original_values_random, "random", fs);
     return 0;
 }
