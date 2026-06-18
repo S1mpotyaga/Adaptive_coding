@@ -31,7 +31,11 @@ public:
 
     void draw_zooming(const SampledSignal& original_values, const std::string& type, const double fs);
 
-    void draw_image(const ColorImageMatrices& original_values);
+    void draw_image_zooming(const ColorImageMatrices& original_values);
+
+    void draw_image_fixed(const ColorImageMatrices& original_values);
+
+    void draw_image_grow_factor(const ColorImageMatrices& original_values);
 
 private:
     void save_signal_comparison(

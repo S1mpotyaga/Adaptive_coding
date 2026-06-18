@@ -15,8 +15,16 @@ public:
 
     [[nodiscard]] EncodedColorImage encode_zooming(const ColorImageMatrices& image) const;
 
+    [[nodiscard]] EncodedColorImage encode_fixed(const ColorImageMatrices& image) const;
+
+    [[nodiscard]] EncodedColorImage encode_grow_factor(const ColorImageMatrices& image) const;
+
 private:
     EncodedImage encode_channel_zooming(const ImageMatrix& channel) const;
+
+    EncodedImage encode_channel_fixed(const ImageMatrix& channel) const;
+
+    EncodedImage encode_channel_grow_factor(const ImageMatrix& channel) const;
 
     AdaptiveConfig m_adaptive_config;
     ObserverConfig m_observer_config;

@@ -278,7 +278,7 @@ void Drawer::draw_zooming(const SampledSignal& original_values, const std::strin
     );
 }
 
-void Drawer::draw_image(const ColorImageMatrices& original_values){
+void Drawer::draw_image_zooming(const ColorImageMatrices& original_values){
     std::filesystem::path output_directry = m_output_directory_image / "zooming";
 
     std::filesystem::create_directories(output_directry);
@@ -305,6 +305,90 @@ void Drawer::draw_image(const ColorImageMatrices& original_values){
 
     const auto decoded_values =
         decoder.decode_zooming(encoded_values);
+
+    const std::string filename =
+        "comparison.png";
+
+    const std::string title =
+        "Сравнение исходного и раскодированного сигнала";
+
+    save_image_comparison(
+        output_directry / filename,
+        title,
+        original_values,
+        decoded_values
+    );
+}
+
+void Drawer::draw_image_fixed(const ColorImageMatrices& original_values){
+    std::filesystem::path output_directry = m_output_directory_image / "fixed";
+
+    std::filesystem::create_directories(output_directry);
+
+    AdaptiveConfig adaptive_config;
+    adaptive_config.initial_step = 0.05;
+    adaptive_config.min_step = 0.005;
+    adaptive_config.max_step = 0.3;
+    adaptive_config.grow_factor = 1.2;
+    adaptive_config.decay_factor = 0.8;
+    adaptive_config.zoom_offset = 0.002;
+
+    ObserverConfig observer_config;
+    observer_config.T = 1.0;
+    observer_config.l1 = 0.15;
+    observer_config.l2 = 0.01;
+    observer_config.initial_v = 0.0;
+
+    ImageCoder coder(adaptive_config, observer_config);
+    ImageDecoder decoder(adaptive_config, observer_config);
+
+    const auto encoded_values =
+        coder.encode_fixed(original_values);
+
+    const auto decoded_values =
+        decoder.decode_fixed(encoded_values);
+
+    const std::string filename =
+        "comparison.png";
+
+    const std::string title =
+        "Сравнение исходного и раскодированного сигнала";
+
+    save_image_comparison(
+        output_directry / filename,
+        title,
+        original_values,
+        decoded_values
+    );
+}
+
+void Drawer::draw_image_grow_factor(const ColorImageMatrices& original_values){
+    std::filesystem::path output_directry = m_output_directory_image / "grow_factor";
+
+    std::filesystem::create_directories(output_directry);
+
+    AdaptiveConfig adaptive_config;
+    adaptive_config.initial_step = 0.05;
+    adaptive_config.min_step = 0.005;
+    adaptive_config.max_step = 0.3;
+    adaptive_config.grow_factor = 1.2;
+    adaptive_config.decay_factor = 0.8;
+    adaptive_config.zoom_offset = 0.002;
+
+    ObserverConfig observer_config;
+    observer_config.T = 1.0;
+    observer_config.l1 = 0.15;
+    observer_config.l2 = 0.01;
+    observer_config.initial_v = 0.0;
+
+    ImageCoder coder(adaptive_config, observer_config);
+    ImageDecoder decoder(adaptive_config, observer_config);
+
+    const auto encoded_values =
+        coder.encode_grow_factor(original_values);
+
+    const auto decoded_values =
+        decoder.decode_grow_factor(encoded_values);
 
     const std::string filename =
         "comparison.png";
