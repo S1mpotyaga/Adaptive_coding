@@ -5,8 +5,7 @@
 #include <iostream>
 #include <matplot/matplot.h>
 
-int main()
-{
+int main(){
     using namespace adaptive;
     using namespace matplot;
     auto signal_const = generator_constant(2);
@@ -47,5 +46,19 @@ int main()
     drawer.draw_zooming(original_values_dec, "dec", fs);
     drawer.draw_zooming(original_values_sin, "sin", fs);
     drawer.draw_zooming(original_values_random, "random", fs);
+
+    const std::filesystem::path image_path = 
+        std::filesystem::path(PROJECT_ROOT) /
+        "test_images" /
+        "test_image.png";
+    if (!std::filesystem::exists(image_path)) {
+        throw std::runtime_error("Image file does not exist: " + image_path.string());
+    }
+
+    ColorImageMatrices original_image = load_color_image(image_path);
+    std::cerr << "Before draw_image\n";
+    drawer.draw_image(original_image);
+    std::cerr << "After draw_image\n";
+    std::cerr << "Before return from main\n";
     return 0;
 }

@@ -10,7 +10,6 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 include(FetchContent)
 
-# cxxopts
 FetchContent_Declare(
     cxxopts
     GIT_REPOSITORY https://github.com/jarro2783/cxxopts.git
@@ -19,42 +18,88 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(cxxopts)
 
-# Matplot++
 FetchContent_Declare(
     matplot
     GIT_REPOSITORY https://github.com/alandefreitas/matplotplusplus.git
-    GIT_TAG master
+    GIT_TAG v1.2.2
 )
 
 FetchContent_MakeAvailable(matplot)
 
-# Найти все .cpp-файлы внутри src
-file(GLOB_RECURSE APP_SOURCES CONFIGURE_DEPENDS
+find_package(
+    OpenCV REQUIRED
+    COMPONENTS
+        core
+        imgcodecs
+        imgproc
+)
+
+message(STATUS "OpenCV version: ${OpenCV_VERSION}")
+message(STATUS "OpenCV include directories: ${OpenCV_INCLUDE_DIRS}")
+message(STATUS "OpenCV libraries: ${OpenCV_LIBS}")
+
+set(
+    OpenCV_DIR
+    "/usr/lib/x86_64-linux-gnu/cmake/opencv4"
+)
+
+find_package(
+    OpenCV REQUIRED
+    COMPONENTS
+        core
+        imgcodecs
+        imgproc
+)
+
+file(
+    GLOB_RECURSE APP_SOURCES
+    CONFIGURE_D
+    
+    EPENDS
     "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
 )
 
-add_executable(app
-    ${APP_SOURCES}
+add_executable(app ${APP_SOURCES})
+
+target_include_directories(
+    app
+    PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/src
+        ${OpenCV_INCLUDE_DIRS}
 )
 
-target_include_directories(app PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/src
+target_compile_definitions(
+    app
+    PRIVATE
+        PROJECT_ROOT="${PROJECT_SOURCE_DIR}"
 )
 
-target_compile_definitions(app PRIVATE
-    PROJECT_ROOT="${CMAKE_SOURCE_DIR}"
+target_link_libraries(
+    app
+    PRIVATE
+        cxxopts::cxxopts
+        Matplot++::matplot
+        ${OpenCV_LIBS}
 )
 
-target_link_libraries(app PRIVATE
-    cxxopts::cxxopts
-    Matplot++::matplot
-)
-
-target_compile_options(app PRIVATE
-    -Wall
-    -Wextra
-    -Wpedantic
-
-    $<$<CONFIG:Debug>:-g;-O0>
-    $<$<CONFIG:Release>:-O3>
-)
+if(MSVC)
+    target_compile_options(
+        app
+        PRIVATE
+            /W4
+            /permissive-
+            $<$<CONFIG:Debug>:/Od;/Zi>
+            $<$<CONFIG:Release>:/O2>
+    )
+else()
+    target_compile_options(
+        app
+        PRIVATE
+            -Wall
+            -Wextra
+            -Wpedantic
+            $<$<CONFIG:Debug>:-g>
+            $<$<CONFIG:Debug>:-O0>
+            $<$<CONFIG:Release>:-O3>
+    )
+endif()
