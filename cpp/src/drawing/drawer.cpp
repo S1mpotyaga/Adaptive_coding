@@ -1,6 +1,8 @@
 #include "drawer.hpp"
 #include "metrics/metrics.hpp"
 
+#include <chrono>
+
 namespace adaptive{
 
 cv::Mat Drawer::color_matrices_to_cv_mat(
@@ -302,14 +304,26 @@ void Drawer::draw_image_zooming(const ColorImageMatrices& original_values){
     ImageCoder coder(adaptive_config, observer_config);
     ImageDecoder decoder(adaptive_config, observer_config);
 
-    const auto encoded_values =
-        coder.encode_zooming(original_values);
+    const auto encode_start = std::chrono::steady_clock::now();
+
+    const auto encoded_values = coder.encode_zooming(original_values);
+
+    const auto encode_end = std::chrono::steady_clock::now();
 
     std::size_t total_encoded_size = Metrics::encoded_color_image_size_bytes(encoded_values);
     std::cerr << "Total encoded size is : " << total_encoded_size << "\n";
 
-    const auto decoded_values =
-        decoder.decode_zooming(encoded_values);
+    const auto decode_start = std::chrono::steady_clock::now();
+
+    const auto decoded_values = decoder.decode_zooming(encoded_values);
+
+    const auto decode_end = std::chrono::steady_clock::now();
+
+    const double encoding_time_ms = std::chrono::duration<double, std::milli>(encode_end - encode_start).count();
+    const double decoding_time_ms = std::chrono::duration<double, std::milli>(decode_end - decode_start).count();
+
+    std::cout << "Encoding time: " << encoding_time_ms << " ms\n";
+    std::cout << "Decoding time: " << decoding_time_ms << " ms\n";
 
     long double mse = Metrics::calc_mse(original_values, decoded_values);
     std::cerr << "MSE: " << mse << "\n\n";
@@ -351,14 +365,26 @@ void Drawer::draw_image_fixed(const ColorImageMatrices& original_values){
     ImageCoder coder(adaptive_config, observer_config);
     ImageDecoder decoder(adaptive_config, observer_config);
 
-    const auto encoded_values =
-        coder.encode_fixed(original_values);
+    const auto encode_start = std::chrono::steady_clock::now();
+
+    const auto encoded_values = coder.encode_fixed(original_values);
+
+    const auto encode_end = std::chrono::steady_clock::now();
 
     std::size_t total_encoded_size = Metrics::encoded_color_image_size_bytes(encoded_values);
     std::cerr << "Total encoded size is : " << total_encoded_size << "\n";
 
-    const auto decoded_values =
-        decoder.decode_fixed(encoded_values);
+    const auto decode_start = std::chrono::steady_clock::now();
+
+    const auto decoded_values = decoder.decode_fixed(encoded_values);
+
+    const auto decode_end = std::chrono::steady_clock::now();
+
+    const double encoding_time_ms = std::chrono::duration<double, std::milli>(encode_end - encode_start).count();
+    const double decoding_time_ms = std::chrono::duration<double, std::milli>(decode_end - decode_start).count();
+
+    std::cout << "Encoding time: " << encoding_time_ms << " ms\n";
+    std::cout << "Decoding time: " << decoding_time_ms << " ms\n";
 
     long double mse = Metrics::calc_mse(original_values, decoded_values);
     std::cerr << "MSE: " << mse << "\n\n";
@@ -400,14 +426,26 @@ void Drawer::draw_image_grow_factor(const ColorImageMatrices& original_values){
     ImageCoder coder(adaptive_config, observer_config);
     ImageDecoder decoder(adaptive_config, observer_config);
 
-    const auto encoded_values =
-        coder.encode_grow_factor(original_values);
+    const auto encode_start = std::chrono::steady_clock::now();
+
+    const auto encoded_values = coder.encode_grow_factor(original_values);
+
+    const auto encode_end = std::chrono::steady_clock::now();
 
     std::size_t total_encoded_size = Metrics::encoded_color_image_size_bytes(encoded_values);
     std::cerr << "Total encoded size is : " << total_encoded_size << "\n";
 
-    const auto decoded_values =
-        decoder.decode_grow_factor(encoded_values);
+    const auto decode_start = std::chrono::steady_clock::now();
+
+    const auto decoded_values = decoder.decode_grow_factor(encoded_values);
+
+    const auto decode_end = std::chrono::steady_clock::now();
+
+    const double encoding_time_ms = std::chrono::duration<double, std::milli>(encode_end - encode_start).count();
+    const double decoding_time_ms = std::chrono::duration<double, std::milli>(decode_end - decode_start).count();
+
+    std::cout << "Encoding time: " << encoding_time_ms << " ms\n";
+    std::cout << "Decoding time: " << decoding_time_ms << " ms\n";
     
     long double mse = Metrics::calc_mse(original_values, decoded_values);
     std::cerr << "MSE: " << mse << "\n\n";
