@@ -1,5 +1,5 @@
 #include "drawer.hpp"
-#include "data/encoded_image_size.hpp"
+#include "metrics/metrics.hpp"
 
 namespace adaptive{
 
@@ -280,6 +280,7 @@ void Drawer::draw_zooming(const SampledSignal& original_values, const std::strin
 }
 
 void Drawer::draw_image_zooming(const ColorImageMatrices& original_values){
+    std::cerr << "\n\nADAPTIVE CODING WITH ZOOMING.\n";
     std::filesystem::path output_directry = m_output_directory_image / "zooming";
 
     std::filesystem::create_directories(output_directry);
@@ -304,11 +305,14 @@ void Drawer::draw_image_zooming(const ColorImageMatrices& original_values){
     const auto encoded_values =
         coder.encode_zooming(original_values);
 
-    std::size_t total_encoded_size = encoded_color_image_size_bytes(encoded_values);
-    std::cerr << "\nTotal encoded size is : " << total_encoded_size << "\n\n";
+    std::size_t total_encoded_size = Metrics::encoded_color_image_size_bytes(encoded_values);
+    std::cerr << "Total encoded size is : " << total_encoded_size << "\n";
 
     const auto decoded_values =
         decoder.decode_zooming(encoded_values);
+
+    long double mse = Metrics::calc_mse(original_values, decoded_values);
+    std::cerr << "MSE: " << mse << "\n\n";
 
     const std::string filename =
         "comparison.png";
@@ -325,6 +329,7 @@ void Drawer::draw_image_zooming(const ColorImageMatrices& original_values){
 }
 
 void Drawer::draw_image_fixed(const ColorImageMatrices& original_values){
+    std::cerr << "\nADAPTIVE CODING WITH FIXED STEP.\n";
     std::filesystem::path output_directry = m_output_directory_image / "fixed";
 
     std::filesystem::create_directories(output_directry);
@@ -349,8 +354,14 @@ void Drawer::draw_image_fixed(const ColorImageMatrices& original_values){
     const auto encoded_values =
         coder.encode_fixed(original_values);
 
+    std::size_t total_encoded_size = Metrics::encoded_color_image_size_bytes(encoded_values);
+    std::cerr << "Total encoded size is : " << total_encoded_size << "\n";
+
     const auto decoded_values =
         decoder.decode_fixed(encoded_values);
+
+    long double mse = Metrics::calc_mse(original_values, decoded_values);
+    std::cerr << "MSE: " << mse << "\n\n";
 
     const std::string filename =
         "comparison.png";
@@ -367,6 +378,7 @@ void Drawer::draw_image_fixed(const ColorImageMatrices& original_values){
 }
 
 void Drawer::draw_image_grow_factor(const ColorImageMatrices& original_values){
+    std::cerr << "\nADAPTIVE CODING WITH GROW FACTOR.\n";
     std::filesystem::path output_directry = m_output_directory_image / "grow_factor";
 
     std::filesystem::create_directories(output_directry);
@@ -391,8 +403,14 @@ void Drawer::draw_image_grow_factor(const ColorImageMatrices& original_values){
     const auto encoded_values =
         coder.encode_grow_factor(original_values);
 
+    std::size_t total_encoded_size = Metrics::encoded_color_image_size_bytes(encoded_values);
+    std::cerr << "Total encoded size is : " << total_encoded_size << "\n";
+
     const auto decoded_values =
         decoder.decode_grow_factor(encoded_values);
+    
+    long double mse = Metrics::calc_mse(original_values, decoded_values);
+    std::cerr << "MSE: " << mse << "\n\n";
 
     const std::string filename =
         "comparison.png";
