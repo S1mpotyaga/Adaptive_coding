@@ -21,6 +21,8 @@ public:
     [[nodiscard]] std::vector<double> decode_zooming(const EncodedData& data) const;
 
 private:
+    [[nodiscard]] static std::int8_t get_code(const EncodedData& data, std::size_t index);
+
     AdaptiveConfig m_adaptive_config;
     ObserverConfig m_observer_config;
 };

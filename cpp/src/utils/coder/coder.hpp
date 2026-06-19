@@ -21,6 +21,8 @@ public:
     [[nodiscard]] EncodedData encode_zooming(const std::vector<double>& signal) const;
 
 private:
+    static void append_code(EncodedData& encoded, bool positive);
+
     AdaptiveConfig m_adaptive_config;
     ObserverConfig m_observer_config;
 };

@@ -29,22 +29,15 @@ ImageMatrix ImageDecoder::decode_channel_zooming(const EncodedImage& image) cons
     ImageMatrix decoded_channel;
     decoded_channel.reserve(image.height);
     for (const EncodedData& encoded_row : image.rows) {
-        std::vector<double> row =
-            row_decoder.decode_zooming(encoded_row);
-
+        std::vector<double> row = row_decoder.decode_zooming(encoded_row);
         if (row.size() != image.width) {
-            throw std::runtime_error(
-                "Decoded row width does not match image width"
-            );
+            throw std::runtime_error("Decoded row width does not match image width");
         }
-
         for (double& pixel : row) {
             pixel = std::clamp(pixel, 0.0, 1.0);
         }
-
         decoded_channel.push_back(std::move(row));
     }
-
     return decoded_channel;
 }
 
@@ -64,22 +57,15 @@ ImageMatrix ImageDecoder::decode_channel_fixed(const EncodedImage& image) const 
     ImageMatrix decoded_channel;
     decoded_channel.reserve(image.height);
     for (const EncodedData& encoded_row : image.rows) {
-        std::vector<double> row =
-            row_decoder.decode_fixed(encoded_row);
-
+        std::vector<double> row = row_decoder.decode_fixed(encoded_row);
         if (row.size() != image.width) {
-            throw std::runtime_error(
-                "Decoded row width does not match image width"
-            );
+            throw std::runtime_error("Decoded row width does not match image width");
         }
-
         for (double& pixel : row) {
             pixel = std::clamp(pixel, 0.0, 1.0);
         }
-
         decoded_channel.push_back(std::move(row));
     }
-
     return decoded_channel;
 }
 
@@ -99,22 +85,15 @@ ImageMatrix ImageDecoder::decode_channel_grow_factor(const EncodedImage& image) 
     ImageMatrix decoded_channel;
     decoded_channel.reserve(image.height);
     for (const EncodedData& encoded_row : image.rows) {
-        std::vector<double> row =
-            row_decoder.decode_grow_factor(encoded_row);
-
+        std::vector<double> row = row_decoder.decode_grow_factor(encoded_row);
         if (row.size() != image.width) {
-            throw std::runtime_error(
-                "Decoded row width does not match image width"
-            );
+            throw std::runtime_error("Decoded row width does not match image width");
         }
-
         for (double& pixel : row) {
             pixel = std::clamp(pixel, 0.0, 1.0);
         }
-
         decoded_channel.push_back(std::move(row));
     }
-
     return decoded_channel;
 }
 

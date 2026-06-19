@@ -1,4 +1,5 @@
 #include "drawer.hpp"
+#include "data/encoded_image_size.hpp"
 
 namespace adaptive{
 
@@ -302,6 +303,9 @@ void Drawer::draw_image_zooming(const ColorImageMatrices& original_values){
 
     const auto encoded_values =
         coder.encode_zooming(original_values);
+
+    std::size_t total_encoded_size = encoded_color_image_size_bytes(encoded_values);
+    std::cerr << "\nTotal encoded size is : " << total_encoded_size << "\n\n";
 
     const auto decoded_values =
         decoder.decode_zooming(encoded_values);
